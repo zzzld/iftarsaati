@@ -10,6 +10,13 @@ import { formatDate, getHijriDate } from "@/utils/dateUtils";
 import { fetchPrayerTimes, PrayerTimeData } from "@/services/prayerTimesService";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
+import ThemeToggle from "@/components/ThemeToggle";
+import CitySelector from "@/components/CitySelector";
+import ReminderSettings from "@/components/ReminderSettings";
+import CalendarView from "@/components/CalendarView";
+import SocialShare from "@/components/SocialShare";
+import LanguageSelector from "@/components/LanguageSelector";
+import RamadanSpecialDays from "@/components/RamadanSpecialDays";
 
 const Index = () => {
   const [selectedCity, setSelectedCity] = useState("ISTANBUL");
@@ -98,6 +105,12 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#e8f5e9] to-[#c8e6c9] dark:from-[#1a3b2e] dark:to-[#102720] transition-colors duration-500">
       <div className="container mx-auto px-4 py-8 md:py-16 max-w-4xl">
+        {/* Header with theme toggle and language selector */}
+        <div className="flex justify-end gap-2 mb-4">
+          <ThemeToggle />
+          <LanguageSelector />
+        </div>
+        
         <div className="text-center mb-12">
           <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#33691e] dark:text-[#aed581]">
             İftar Saati
@@ -114,19 +127,22 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="flex justify-center mb-8">
-            <Select value={selectedCity} onValueChange={handleCityChange}>
-              <SelectTrigger className="w-64 bg-white/90 dark:bg-[#2e463b]/90 backdrop-blur-sm border border-green-200 dark:border-green-900 rounded-full">
-                <SelectValue placeholder="Şehir seçiniz" />
-              </SelectTrigger>
-              <SelectContent className="max-h-80 bg-white dark:bg-[#2e463b] border-green-200 dark:border-green-900">
-                {turkishCities.map((city) => (
-                  <SelectItem key={city.value} value={city.value}>
-                    {city.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="mb-8">
+            <CitySelector
+              selectedCity={selectedCity}
+              onCityChange={handleCityChange}
+            />
+          </div>
+          
+          {/* Action buttons */}
+          <div className="flex justify-center flex-wrap gap-2 mb-8">
+            <ReminderSettings todayTimes={todayTimes} city={selectedCity} />
+            <CalendarView prayerTimes={prayerTimes} />
+            <SocialShare
+              city={turkishCities.find(c => c.value === selectedCity)?.label || selectedCity}
+              todayTimes={todayTimes ? { imsak: todayTimes.imsak, aksam: todayTimes.aksam } : null}
+            />
+            <RamadanSpecialDays />
           </div>
         </div>
 
@@ -142,7 +158,7 @@ const Index = () => {
                   <Moon className="w-5 h-5 mr-2 text-[#558b2f] dark:text-[#aed581]" />
                   İftar Vakti
                 </h2>
-                <p className="text-4xl md:text-6xl font-bold text-[#33691e] dark:text-white mb-6">
+                <p className="text-4xl md:text-6xl font-bold text-[#33691e] dark:text-white mb-6 pulse-iftar">
                   {todayTimes?.aksam || "Yükleniyor..."}
                 </p>
                 
