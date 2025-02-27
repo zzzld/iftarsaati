@@ -213,7 +213,7 @@ const ReminderSettings = ({ todayTimes, city }: ReminderSettingsProps) => {
             className="mt-2 bg-amber-500 hover:bg-amber-600 text-white"
             onClick={showReminderDemo}
           >
-            Hatırlatıcı Dene
+            HATIRLAT
           </Button>
         </div>
         <DialogFooter>

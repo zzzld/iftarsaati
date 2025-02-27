@@ -231,9 +231,13 @@ const Index = () => {
           </div>
           
           <div className="text-center mb-12">
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#33691e] dark:text-[#aed581]">
-              İftar Saati
-            </h1>
+            <div className="flex justify-center items-center mb-4">
+              <img 
+                src="/lovable-uploads/bb62668f-01fa-4c5d-bda8-0b8800979b55.png" 
+                alt="İftar Saati Logo" 
+                className="h-16 md:h-20"
+              />
+            </div>
             <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-6">
               <div className="flex items-center text-gray-600 dark:text-gray-300">
                 <Calendar className="w-5 h-5 mr-2" />
@@ -434,11 +438,11 @@ const Index = () => {
                 <p>{cityLabel} Ramazan İmsakiyesi 2024 - {formatDate(currentTime)} {todayTimes?.hicri_tarih}</p>
               </div>
               
-              {/* İlgili şehirler (SEO için) */}
+              {/* İlgili şehirler (SEO için) - 81 il hepsi */}
               <div className="mt-16">
                 <h2 className="text-xl text-[#33691e] dark:text-[#aed581] mb-4 text-center">Diğer Şehirler İçin İftar Vakitleri</h2>
                 <div className="flex flex-wrap justify-center gap-2">
-                  {turkishCities.slice(0, 12).map((city) => (
+                  {turkishCities.map((city) => (
                     <Button
                       key={city.value}
                       variant="outline"
