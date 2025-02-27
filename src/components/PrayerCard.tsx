@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Book } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getDailyPrayer } from "@/utils/prayerUtils";
 
@@ -24,18 +24,19 @@ const PrayerCard = () => {
   };
 
   return (
-    <Card className="p-6 md:p-8 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
+    <Card className="p-6 md:p-8 bg-white/80 dark:bg-[#2e463b]/80 backdrop-blur-md border border-green-200 dark:border-green-900 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
       <div className="text-center">
-        <h2 className="text-xl md:text-2xl font-medium text-gray-800 dark:text-white mb-4">
+        <h2 className="text-xl md:text-2xl font-semibold text-[#33691e] dark:text-[#aed581] mb-4 flex items-center justify-center">
+          <Book className="w-5 h-5 mr-2 text-[#558b2f] dark:text-[#aed581]" />
           Günün Duası
         </h2>
         <div className="mb-4">
-          <h3 className="text-lg font-medium text-gray-700 dark:text-gray-200 mb-2">
+          <h3 className="text-lg font-medium text-[#558b2f] dark:text-[#aed581] mb-2">
             {prayer.title}
           </h3>
           <div
             className={cn(
-              "text-gray-600 dark:text-gray-300 overflow-hidden transition-all duration-500",
+              "relative text-[#33691e] dark:text-gray-300 overflow-hidden transition-all duration-500",
               isExpanded ? "max-h-[1000px]" : "max-h-24"
             )}
           >
@@ -43,14 +44,14 @@ const PrayerCard = () => {
               {prayer.content}
             </p>
             {!isExpanded && (
-              <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white dark:from-gray-800 to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white dark:from-[#2e463b] to-transparent"></div>
             )}
           </div>
         </div>
         <Button
-          variant="ghost"
+          variant="outline"
           size="sm"
-          className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+          className="text-[#558b2f] dark:text-[#aed581] border-green-200 dark:border-green-700 hover:bg-green-50 dark:hover:bg-green-900"
           onClick={toggleExpand}
         >
           {isExpanded ? (
@@ -65,7 +66,7 @@ const PrayerCard = () => {
             </>
           )}
         </Button>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-4 italic">
+        <p className="text-sm text-[#558b2f] dark:text-[#aed581] mt-4 italic">
           {prayer.source}
         </p>
       </div>
