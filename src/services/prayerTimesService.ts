@@ -56,7 +56,7 @@ const getMockPrayerTimes = (): PrayerTimeData[] => {
       hicri_tarih: hicriDate,
       imsak: `03:${48 + i % 5}`,
       gunes: `05:${36 + i % 5}`,
-      ogle: `13:${00 + i % 5}`,
+      ogle: `13:${(i % 5).toString().padStart(2, '0')}`,
       ikindi: `16:${53 + i % 5}`,
       aksam: `20:${15 + i % 5}`,
       yatsi: `21:${57 + i % 5}`,
