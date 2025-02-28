@@ -11,13 +11,7 @@ export interface PrayerTimeData {
 
 export const fetchPrayerTimes = async (city: string): Promise<PrayerTimeData[]> => {
   try {
-    const response = await fetch(`https://awoken.com.tr/api.php?city=${encodeURIComponent(city)}`);
-    
-	console.log(response)
-    if (!response.ok) {
-      throw new Error(`Error fetching prayer times: ${response.statusText}`);
-    }
-    
+    const response = await fetch(`https://www.iftarsaati.net/api.php?city=${encodeURIComponent(city)}`);    
     const data = await response.json();
     
 	console.log(city, data)
