@@ -12,16 +12,8 @@ export interface PrayerTimeData {
 
 export const fetchPrayerTimes = async (city: string): Promise<PrayerTimeData[]> => {
   try {
-    // API endpoint doğrudan hard-coded şeklinde kullanılmış
-    // API URL'i gerçek projenizde değiştirilmeli
-    // const response = await fetch(`/index.php?city=${encodeURIComponent(city)}`);
-    
-    // Şimdilik bu API çalışmadığı için mock data kullanalım
-    console.log(`API için ${city} şehir bilgisi gönderildi, ancak API çalışmadığı için mock data döndürülüyor`);
-    return getMockPrayerTimes();
-    
-    /* Gerçek API çalıştığında bu kodu kullanın
-    const response = await fetch(`https://api-domain.com/prayer-times?city=${encodeURIComponent(city)}`);
+    // API endpoint
+    const response = await fetch(`/index.php?city=${encodeURIComponent(city)}`);
     
     if (!response.ok) {
       throw new Error(`Error fetching prayer times: ${response.statusText}`);
@@ -34,7 +26,6 @@ export const fetchPrayerTimes = async (city: string): Promise<PrayerTimeData[]> 
     }
     
     return data.data;
-    */
   } catch (error) {
     console.error('Error fetching prayer times:', error);
     // For demo purposes, return mock data when API call fails
