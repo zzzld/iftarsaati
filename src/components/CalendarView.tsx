@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -22,6 +22,13 @@ const CalendarView = ({ prayerTimes }: CalendarViewProps) => {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedTimes, setSelectedTimes] = useState<PrayerTimeData | null>(null);
 
+  // prayerTimes değiştiğinde seçili değerleri sıfırla
+  useEffect(() => {
+    if (date) {
+      handleSelect(date);
+    }
+  }, [prayerTimes]);
+
   const handleSelect = (selectedDate: Date | undefined) => {
     if (!selectedDate) return;
     
@@ -31,22 +38,31 @@ const CalendarView = ({ prayerTimes }: CalendarViewProps) => {
     setSelectedDate(formattedDate);
     
     // Seçilen tarihe ait namaz vakitlerini bul
-    const dayTimes = prayerTimes.find(time => {
-      // API'den gelen tarih formatını kontrol et
-      const dateParts = time.miladi_tarih.split('.');
-      if (dateParts.length === 3) {
-        const day = parseInt(dateParts[0], 10);
-        const month = parseInt(dateParts[1], 10);
-        const year = parseInt(dateParts[2], 10);
+    let dayTimes = null;
+    
+    try {
+      dayTimes = prayerTimes.find(time => {
+        // API'den gelen tarih formatını kontrol et
+        if (!time.miladi_tarih) return false;
         
-        return (
-          day === selectedDate.getDate() &&
-          month === selectedDate.getMonth() + 1 &&
-          year === selectedDate.getFullYear()
-        );
-      }
-      return false;
-    });
+        const dateParts = time.miladi_tarih.split('.');
+        if (dateParts.length === 3) {
+          const day = parseInt(dateParts[0], 10);
+          const month = parseInt(dateParts[1], 10);
+          const year = parseInt(dateParts[2], 10);
+          
+          return (
+            day === selectedDate.getDate() &&
+            month === selectedDate.getMonth() + 1 &&
+            year === selectedDate.getFullYear()
+          );
+        }
+        return false;
+      });
+    } catch (error) {
+      console.error("Error finding prayer times for selected date:", error);
+      dayTimes = null;
+    }
     
     setSelectedTimes(dayTimes || null);
   };
@@ -75,10 +91,17 @@ const CalendarView = ({ prayerTimes }: CalendarViewProps) => {
               day_selected: "bg-[#33691e] text-white hover:bg-[#558b2f] focus:bg-[#558b2f]",
               day_today: "bg-green-100 dark:bg-green-900 text-[#33691e] dark:text-[#aed581]",
             }}
+            // 7 günlük bir aralık göster (API verileriyle uyumlu olacak şekilde)
+            fromDate={new Date()}
+            toDate={(() => {
+              const endDate = new Date();
+              endDate.setDate(endDate.getDate() + 6);
+              return endDate;
+            })()}
           />
         </div>
         
-        {selectedTimes && (
+        {selectedTimes ? (
           <div className="p-3 pt-0">
             <h3 className="font-medium text-[#33691e] dark:text-[#aed581] mb-2">
               {selectedDate} Namaz Vakitleri
@@ -109,6 +132,12 @@ const CalendarView = ({ prayerTimes }: CalendarViewProps) => {
                 <span className="font-medium text-[#33691e] dark:text-white">{selectedTimes.yatsi}</span>
               </div>
             </div>
+          </div>
+        ) : (
+          <div className="p-3 pt-0">
+            <p className="text-gray-500 dark:text-gray-400 text-sm">
+              Seçilen tarih için namaz vakti bilgisi bulunamadı.
+            </p>
           </div>
         )}
       </PopoverContent>

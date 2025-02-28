@@ -50,21 +50,35 @@ const Index = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
+        // API'ye istek at
         const data = await fetchPrayerTimes(selectedCity);
+        
+        if (!data || data.length === 0) {
+          throw new Error("Namaz vakitleri alınamadı, veri bulunamadı.");
+        }
+        
         setPrayerTimes(data);
         
         if (data && data.length > 0) {
           setTodayTimes(data[0]);
         }
         
-        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching prayer times:", error);
+        
+        // Hata bildirimini göster
         toast({
-          title: "Hata",
-          description: "Namaz vakitleri alınırken bir hata oluştu.",
+          title: "API Bağlantı Hatası",
+          description: "Şu anda gerçek veriler alınamıyor. Geçici olarak örnek veriler kullanılıyor.",
           variant: "destructive",
+          duration: 5000,
         });
+        
+        // Mock veriler yüklenmiş olabilir, onu kontrol et
+        if (prayerTimes.length > 0) {
+          setTodayTimes(prayerTimes[0]);
+        }
+      } finally {
         setIsLoading(false);
       }
     };

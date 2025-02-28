@@ -12,8 +12,16 @@ export interface PrayerTimeData {
 
 export const fetchPrayerTimes = async (city: string): Promise<PrayerTimeData[]> => {
   try {
-    // Replace with your actual API endpoint
-    const response = await fetch(`/index.php?city=${encodeURIComponent(city)}`);
+    // API endpoint doğrudan hard-coded şeklinde kullanılmış
+    // API URL'i gerçek projenizde değiştirilmeli
+    // const response = await fetch(`/index.php?city=${encodeURIComponent(city)}`);
+    
+    // Şimdilik bu API çalışmadığı için mock data kullanalım
+    console.log(`API için ${city} şehir bilgisi gönderildi, ancak API çalışmadığı için mock data döndürülüyor`);
+    return getMockPrayerTimes();
+    
+    /* Gerçek API çalıştığında bu kodu kullanın
+    const response = await fetch(`https://api-domain.com/prayer-times?city=${encodeURIComponent(city)}`);
     
     if (!response.ok) {
       throw new Error(`Error fetching prayer times: ${response.statusText}`);
@@ -26,6 +34,7 @@ export const fetchPrayerTimes = async (city: string): Promise<PrayerTimeData[]> 
     }
     
     return data.data;
+    */
   } catch (error) {
     console.error('Error fetching prayer times:', error);
     // For demo purposes, return mock data when API call fails
@@ -36,78 +45,32 @@ export const fetchPrayerTimes = async (city: string): Promise<PrayerTimeData[]> 
 // Mock data for testing when API is not available
 const getMockPrayerTimes = (): PrayerTimeData[] => {
   const today = new Date();
-  const todayStr = today.toLocaleDateString('tr-TR');
+  const result = [];
   
-  return [
-    {
-      miladi_tarih: todayStr,
-      hicri_tarih: "1 Ramazan 1445",
-      imsak: "05:30",
-      gunes: "07:15",
-      ogle: "13:00",
-      ikindi: "16:30",
-      aksam: "19:45",
-      yatsi: "21:15"
-    },
-    {
-      miladi_tarih: new Date(today.setDate(today.getDate() + 1)).toLocaleDateString('tr-TR'),
-      hicri_tarih: "2 Ramazan 1445",
-      imsak: "05:29",
-      gunes: "07:14",
-      ogle: "13:00",
-      ikindi: "16:31",
-      aksam: "19:46",
-      yatsi: "21:16"
-    },
-    {
-      miladi_tarih: new Date(today.setDate(today.getDate() + 1)).toLocaleDateString('tr-TR'),
-      hicri_tarih: "3 Ramazan 1445",
-      imsak: "05:28",
-      gunes: "07:13",
-      ogle: "13:00",
-      ikindi: "16:32",
-      aksam: "19:47",
-      yatsi: "21:17"
-    },
-    {
-      miladi_tarih: new Date(today.setDate(today.getDate() + 1)).toLocaleDateString('tr-TR'),
-      hicri_tarih: "4 Ramazan 1445",
-      imsak: "05:27",
-      gunes: "07:12",
-      ogle: "13:00",
-      ikindi: "16:33",
-      aksam: "19:48",
-      yatsi: "21:18"
-    },
-    {
-      miladi_tarih: new Date(today.setDate(today.getDate() + 1)).toLocaleDateString('tr-TR'),
-      hicri_tarih: "5 Ramazan 1445",
-      imsak: "05:26",
-      gunes: "07:11",
-      ogle: "13:00",
-      ikindi: "16:34",
-      aksam: "19:49",
-      yatsi: "21:19"
-    },
-    {
-      miladi_tarih: new Date(today.setDate(today.getDate() + 1)).toLocaleDateString('tr-TR'),
-      hicri_tarih: "6 Ramazan 1445",
-      imsak: "05:25",
-      gunes: "07:10",
-      ogle: "13:00",
-      ikindi: "16:35",
-      aksam: "19:50",
-      yatsi: "21:20"
-    },
-    {
-      miladi_tarih: new Date(today.setDate(today.getDate() + 1)).toLocaleDateString('tr-TR'),
-      hicri_tarih: "7 Ramazan 1445",
-      imsak: "05:24",
-      gunes: "07:09",
-      ogle: "13:00",
-      ikindi: "16:36",
-      aksam: "19:51",
-      yatsi: "21:21"
-    }
-  ];
+  // 7 günlük namaz vakti bilgisi oluşturalım
+  for (let i = 0; i < 7; i++) {
+    const day = new Date(today);
+    day.setDate(today.getDate() + i);
+    
+    // Tarihi Türkçe formatta oluştur (gün.ay.yıl)
+    const formattedDate = `${day.getDate().toString().padStart(2, '0')}.${(day.getMonth() + 1).toString().padStart(2, '0')}.${day.getFullYear()}`;
+    
+    // Örnek hicri tarih - gerçek hesaplama gerektirir
+    const hicriDay = i + 1;
+    const hicriDate = `${hicriDay} Ramazan 1445`;
+    
+    // Sahte namaz vakti verileri - her gün biraz değişsin
+    result.push({
+      miladi_tarih: formattedDate,
+      hicri_tarih: hicriDate,
+      imsak: `0${4 + Math.floor(i/3)}:${30 - i}`,
+      gunes: `0${6 + Math.floor(i/4)}:${15 - i}`,
+      ogle: `${12}:${45 + Math.floor(i/2)}`,
+      ikindi: `${16}:${10 + i}`,
+      aksam: `${19}:${20 + i}`,
+      yatsi: `${20}:${50 + i}`,
+    });
+  }
+  
+  return result;
 };
