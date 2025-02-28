@@ -38,7 +38,7 @@ const getMockPrayerTimes = (): PrayerTimeData[] => {
   const today = new Date();
   const result = [];
   
-  // 7 günlük namaz vakti bilgisi oluşturalım
+  // 7 günlük namaz vakti bilgisi oluşturalım - gerçekçi saatler ile
   for (let i = 0; i < 7; i++) {
     const day = new Date(today);
     day.setDate(today.getDate() + i);
@@ -50,16 +50,16 @@ const getMockPrayerTimes = (): PrayerTimeData[] => {
     const hicriDay = i + 1;
     const hicriDate = `${hicriDay} Ramazan 1445`;
     
-    // Sahte namaz vakti verileri - her gün biraz değişsin
+    // İstanbul için gerçeğe yakın namaz vakitleri (Mayıs 2024)
     result.push({
       miladi_tarih: formattedDate,
       hicri_tarih: hicriDate,
-      imsak: `0${4 + Math.floor(i/3)}:${30 - i}`,
-      gunes: `0${6 + Math.floor(i/4)}:${15 - i}`,
-      ogle: `${12}:${45 + Math.floor(i/2)}`,
-      ikindi: `${16}:${10 + i}`,
-      aksam: `${19}:${20 + i}`,
-      yatsi: `${20}:${50 + i}`,
+      imsak: `03:${48 + i % 5}`,
+      gunes: `05:${36 + i % 5}`,
+      ogle: `13:${00 + i % 5}`,
+      ikindi: `16:${53 + i % 5}`,
+      aksam: `20:${15 + i % 5}`,
+      yatsi: `21:${57 + i % 5}`,
     });
   }
   
