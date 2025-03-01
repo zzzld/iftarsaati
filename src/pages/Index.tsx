@@ -135,8 +135,8 @@ const Index = () => {
   // SEO için meta bilgileri
   const selectedCityObj = turkishCities.find(city => city.value === selectedCity);
   const cityLabel = selectedCityObj?.label || "Türkiye";
-  const pageTitle = `${cityLabel} İftar Saati 2024 - ${cityLabel} İftar ve Sahur Vakitleri`;
-  const pageDescription = `${cityLabel} için 2024 Ramazan ayı iftar ve sahur vakitleri, imsakiye, namaz saatleri. ${cityLabel} iftar saati: ${todayTimes?.aksam || "yükleniyor"}, imsak: ${todayTimes?.imsak || "yükleniyor"}.`;
+  const pageTitle = `${cityLabel} İftar Saati 2025 - ${cityLabel} İftar ve Sahur Vakitleri`;
+  const pageDescription = `${cityLabel} için 2025 Ramazan ayı iftar ve sahur vakitleri, imsakiye, namaz saatleri. ${cityLabel} iftar saati: ${todayTimes?.aksam || "yükleniyor"}, imsak: ${todayTimes?.imsak || "yükleniyor"}.`;
 
   return (
     <>
