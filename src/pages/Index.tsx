@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -28,7 +27,6 @@ const Index = () => {
   const [timeRemaining, setTimeRemaining] = useState<{ hours: number; minutes: number; seconds: number } | null>(null);
   const { toast } = useToast();
   
-  // URL'den şehir parametresini al
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const cityParam = urlParams.get('city');
@@ -38,7 +36,6 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    // Update current time every second
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
@@ -50,7 +47,6 @@ const Index = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        // API'ye istek at
         const data = await fetchPrayerTimes(selectedCity);
         
         if (!data || data.length === 0) {
@@ -66,7 +62,6 @@ const Index = () => {
       } catch (error) {
         console.error("Error fetching prayer times:", error);
         
-        // Hata bildirimini göster
         toast({
           title: "API Bağlantı Hatası",
           description: "Şu anda gerçek veriler alınamıyor. Geçici olarak örnek veriler kullanılıyor.",
@@ -74,7 +69,6 @@ const Index = () => {
           duration: 5000,
         });
         
-        // Mock veriler yüklenmiş olabilir, onu kontrol et
         if (prayerTimes.length > 0) {
           setTodayTimes(prayerTimes[0]);
         }
@@ -85,11 +79,9 @@ const Index = () => {
 
     fetchData();
     
-    // Şehir değiştiğinde URL'yi güncelle (history API ile)
     const newUrl = new URL(window.location.href);
     newUrl.searchParams.set('city', selectedCity);
     window.history.pushState({}, '', newUrl.toString());
-    
   }, [selectedCity, toast]);
 
   useEffect(() => {
@@ -109,7 +101,6 @@ const Index = () => {
     const iftarTime = new Date(now);
     iftarTime.setHours(hours, minutes, 0, 0);
 
-    // If iftar time has passed for today, don't show countdown
     if (now > iftarTime) {
       setTimeRemaining(null);
       return;
@@ -132,7 +123,6 @@ const Index = () => {
     setSelectedCity(city);
   };
 
-  // SEO için meta bilgileri
   const selectedCityObj = turkishCities.find(city => city.value === selectedCity);
   const cityLabel = selectedCityObj?.label || "Türkiye";
   const pageTitle = `${cityLabel} İftar Saati 2025 - ${cityLabel} İftar ve Sahur Vakitleri`;
@@ -150,7 +140,6 @@ const Index = () => {
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
         
-        {/* Schema.org structurated data for each city */}
         <script type="application/ld+json">{`
           {
             "@context": "https://schema.org",
@@ -201,7 +190,6 @@ const Index = () => {
           `}</script>
         )}
         
-        {/* FAQs Schema */}
         <script type="application/ld+json">{`
           {
             "@context": "https://schema.org",
@@ -237,14 +225,13 @@ const Index = () => {
       </Helmet>
       
       <div className="min-h-screen bg-gradient-to-b from-[#e8f5e9] to-[#c8e6c9] dark:from-[#1a3b2e] dark:to-[#102720] transition-colors duration-500">
-        <div className="container mx-auto px-4 py-8 md:py-16 max-w-4xl">
-          {/* Header with theme toggle and language selector */}
+        <div className="container mx-auto px-2 sm:px-4 py-8 md:py-16 max-w-4xl">
           <div className="flex justify-end gap-2 mb-4">
             <ThemeToggle />
             <LanguageSelector />
           </div>
           
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <div className="flex justify-center items-center mb-4">
               <img 
                 src="/lovable-uploads/bb62668f-01fa-4c5d-bda8-0b8800979b55.png" 
@@ -264,22 +251,23 @@ const Index = () => {
               </div>
             </div>
             
-            <div className="mb-8">
+            <div className="mb-6">
               <CitySelector
                 selectedCity={selectedCity}
                 onCityChange={handleCityChange}
               />
             </div>
             
-            {/* Action buttons */}
-            <div className="flex justify-center flex-wrap gap-2 mb-8">
-              <ReminderSettings todayTimes={todayTimes} city={selectedCity} />
-              <CalendarView prayerTimes={prayerTimes} />
-              <SocialShare
-                city={turkishCities.find(c => c.value === selectedCity)?.label || selectedCity}
-                todayTimes={todayTimes ? { imsak: todayTimes.imsak, aksam: todayTimes.aksam } : null}
-              />
-              <RamadanSpecialDays />
+            <div className="flex justify-center flex-wrap gap-2 mb-4">
+              <div className="flex gap-2 flex-wrap justify-center">
+                <ReminderSettings todayTimes={todayTimes} city={selectedCity} />
+                <CalendarView prayerTimes={prayerTimes} />
+                <SocialShare
+                  city={turkishCities.find(c => c.value === selectedCity)?.label || selectedCity}
+                  todayTimes={todayTimes ? { imsak: todayTimes.imsak, aksam: todayTimes.aksam } : null}
+                />
+                <RamadanSpecialDays />
+              </div>
             </div>
           </div>
 
@@ -289,7 +277,7 @@ const Index = () => {
             </div>
           ) : (
             <>
-              <Card className="mb-8 p-6 md:p-10 bg-white/80 dark:bg-[#2e463b]/80 backdrop-blur-md border border-green-200 dark:border-green-900 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
+              <Card className="mb-6 p-4 md:p-8 bg-white/80 dark:bg-[#2e463b]/80 backdrop-blur-md border border-green-200 dark:border-green-900 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl w-full max-w-full overflow-hidden">
                 <div className="text-center">
                   <h2 className="text-xl font-medium text-[#558b2f] dark:text-[#aed581] mb-2 flex items-center justify-center">
                     <Moon className="w-5 h-5 mr-2 text-[#558b2f] dark:text-[#aed581]" />
@@ -300,7 +288,7 @@ const Index = () => {
                   </p>
                   
                   {timeRemaining && (
-                    <div className="mt-8">
+                    <div className="mt-6">
                       <h3 className="text-sm font-medium text-[#558b2f] dark:text-[#aed581] mb-3">
                         İftara Kalan Süre
                       </h3>
@@ -331,76 +319,76 @@ const Index = () => {
                 </div>
               </Card>
 
-              <Tabs defaultValue="today" className="mb-12">
+              <Tabs defaultValue="today" className="mb-8">
                 <TabsList className="w-full grid grid-cols-2 bg-white/70 dark:bg-[#2e463b]/70 border border-green-200 dark:border-green-900 rounded-xl mb-4">
                   <TabsTrigger value="today" className="text-[#558b2f] dark:text-[#aed581]">Bugün</TabsTrigger>
                   <TabsTrigger value="week" className="text-[#558b2f] dark:text-[#aed581]">Haftalık</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="today">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4">
                     <div className="prayer-time-card">
-                      <Card className="h-full p-4 bg-white/70 dark:bg-[#2e463b]/70 backdrop-blur-sm border border-green-200 dark:border-green-900 rounded-xl shadow transition-all duration-300 hover:shadow-md">
+                      <Card className="h-full p-3 md:p-4 bg-white/70 dark:bg-[#2e463b]/70 backdrop-blur-sm border border-green-200 dark:border-green-900 rounded-xl shadow transition-all duration-300 hover:shadow-md">
                         <div className="flex items-center">
-                          <Sun className="w-5 h-5 text-amber-500 mr-3" />
+                          <Sun className="w-4 h-4 md:w-5 md:h-5 text-amber-500 mr-2 md:mr-3 flex-shrink-0" />
                           <div>
-                            <h3 className="text-sm font-medium text-[#558b2f] dark:text-[#aed581]">İmsak</h3>
-                            <p className="text-xl font-bold text-[#33691e] dark:text-white">{todayTimes?.imsak}</p>
+                            <h3 className="text-xs md:text-sm font-medium text-[#558b2f] dark:text-[#aed581]">İmsak</h3>
+                            <p className="text-lg md:text-xl font-bold text-[#33691e] dark:text-white">{todayTimes?.imsak}</p>
                           </div>
                         </div>
                       </Card>
                     </div>
                     <div className="prayer-time-card">
-                      <Card className="h-full p-4 bg-white/70 dark:bg-[#2e463b]/70 backdrop-blur-sm border border-green-200 dark:border-green-900 rounded-xl shadow transition-all duration-300 hover:shadow-md">
+                      <Card className="h-full p-3 md:p-4 bg-white/70 dark:bg-[#2e463b]/70 backdrop-blur-sm border border-green-200 dark:border-green-900 rounded-xl shadow transition-all duration-300 hover:shadow-md">
                         <div className="flex items-center">
-                          <Sun className="w-5 h-5 text-amber-500 mr-3" />
+                          <Sun className="w-4 h-4 md:w-5 md:h-5 text-amber-500 mr-2 md:mr-3 flex-shrink-0" />
                           <div>
-                            <h3 className="text-sm font-medium text-[#558b2f] dark:text-[#aed581]">Güneş</h3>
-                            <p className="text-xl font-bold text-[#33691e] dark:text-white">{todayTimes?.gunes}</p>
+                            <h3 className="text-xs md:text-sm font-medium text-[#558b2f] dark:text-[#aed581]">Güneş</h3>
+                            <p className="text-lg md:text-xl font-bold text-[#33691e] dark:text-white">{todayTimes?.gunes}</p>
                           </div>
                         </div>
                       </Card>
                     </div>
                     <div className="prayer-time-card">
-                      <Card className="h-full p-4 bg-white/70 dark:bg-[#2e463b]/70 backdrop-blur-sm border border-green-200 dark:border-green-900 rounded-xl shadow transition-all duration-300 hover:shadow-md">
+                      <Card className="h-full p-3 md:p-4 bg-white/70 dark:bg-[#2e463b]/70 backdrop-blur-sm border border-green-200 dark:border-green-900 rounded-xl shadow transition-all duration-300 hover:shadow-md">
                         <div className="flex items-center">
-                          <Sun className="w-5 h-5 text-amber-500 mr-3" />
+                          <Sun className="w-4 h-4 md:w-5 md:h-5 text-amber-500 mr-2 md:mr-3 flex-shrink-0" />
                           <div>
-                            <h3 className="text-sm font-medium text-[#558b2f] dark:text-[#aed581]">Öğle</h3>
-                            <p className="text-xl font-bold text-[#33691e] dark:text-white">{todayTimes?.ogle}</p>
+                            <h3 className="text-xs md:text-sm font-medium text-[#558b2f] dark:text-[#aed581]">Öğle</h3>
+                            <p className="text-lg md:text-xl font-bold text-[#33691e] dark:text-white">{todayTimes?.ogle}</p>
                           </div>
                         </div>
                       </Card>
                     </div>
                     <div className="prayer-time-card">
-                      <Card className="h-full p-4 bg-white/70 dark:bg-[#2e463b]/70 backdrop-blur-sm border border-green-200 dark:border-green-900 rounded-xl shadow transition-all duration-300 hover:shadow-md">
+                      <Card className="h-full p-3 md:p-4 bg-white/70 dark:bg-[#2e463b]/70 backdrop-blur-sm border border-green-200 dark:border-green-900 rounded-xl shadow transition-all duration-300 hover:shadow-md">
                         <div className="flex items-center">
-                          <Sun className="w-5 h-5 text-amber-500 mr-3" />
+                          <Sun className="w-4 h-4 md:w-5 md:h-5 text-amber-500 mr-2 md:mr-3 flex-shrink-0" />
                           <div>
-                            <h3 className="text-sm font-medium text-[#558b2f] dark:text-[#aed581]">İkindi</h3>
-                            <p className="text-xl font-bold text-[#33691e] dark:text-white">{todayTimes?.ikindi}</p>
+                            <h3 className="text-xs md:text-sm font-medium text-[#558b2f] dark:text-[#aed581]">İkindi</h3>
+                            <p className="text-lg md:text-xl font-bold text-[#33691e] dark:text-white">{todayTimes?.ikindi}</p>
                           </div>
                         </div>
                       </Card>
                     </div>
                     <div className="prayer-time-card">
-                      <Card className="h-full p-4 bg-white/70 dark:bg-[#2e463b]/70 backdrop-blur-sm border border-green-200 dark:border-green-900 rounded-xl shadow transition-all duration-300 hover:shadow-md">
+                      <Card className="h-full p-3 md:p-4 bg-white/70 dark:bg-[#2e463b]/70 backdrop-blur-sm border border-green-200 dark:border-green-900 rounded-xl shadow transition-all duration-300 hover:shadow-md">
                         <div className="flex items-center">
-                          <Moon className="w-5 h-5 text-gray-700 dark:text-gray-300 mr-3" />
+                          <Moon className="w-4 h-4 md:w-5 md:h-5 text-gray-700 dark:text-gray-300 mr-2 md:mr-3 flex-shrink-0" />
                           <div>
-                            <h3 className="text-sm font-medium text-[#558b2f] dark:text-[#aed581]">Akşam (İftar)</h3>
-                            <p className="text-xl font-bold text-[#33691e] dark:text-white">{todayTimes?.aksam}</p>
+                            <h3 className="text-xs md:text-sm font-medium text-[#558b2f] dark:text-[#aed581]">Akşam (İftar)</h3>
+                            <p className="text-lg md:text-xl font-bold text-[#33691e] dark:text-white">{todayTimes?.aksam}</p>
                           </div>
                         </div>
                       </Card>
                     </div>
                     <div className="prayer-time-card">
-                      <Card className="h-full p-4 bg-white/70 dark:bg-[#2e463b]/70 backdrop-blur-sm border border-green-200 dark:border-green-900 rounded-xl shadow transition-all duration-300 hover:shadow-md">
+                      <Card className="h-full p-3 md:p-4 bg-white/70 dark:bg-[#2e463b]/70 backdrop-blur-sm border border-green-200 dark:border-green-900 rounded-xl shadow transition-all duration-300 hover:shadow-md">
                         <div className="flex items-center">
-                          <Moon className="w-5 h-5 text-gray-700 dark:text-gray-300 mr-3" />
+                          <Moon className="w-4 h-4 md:w-5 md:h-5 text-gray-700 dark:text-gray-300 mr-2 md:mr-3 flex-shrink-0" />
                           <div>
-                            <h3 className="text-sm font-medium text-[#558b2f] dark:text-[#aed581]">Yatsı</h3>
-                            <p className="text-xl font-bold text-[#33691e] dark:text-white">{todayTimes?.yatsi}</p>
+                            <h3 className="text-xs md:text-sm font-medium text-[#558b2f] dark:text-[#aed581]">Yatsı</h3>
+                            <p className="text-lg md:text-xl font-bold text-[#33691e] dark:text-white">{todayTimes?.yatsi}</p>
                           </div>
                         </div>
                       </Card>
@@ -409,7 +397,7 @@ const Index = () => {
                 </TabsContent>
                 
                 <TabsContent value="week">
-                  <div className="bg-white/70 dark:bg-[#2e463b]/70 backdrop-blur-sm border border-green-200 dark:border-green-900 rounded-xl p-4 overflow-x-auto">
+                  <div className="bg-white/70 dark:bg-[#2e463b]/70 backdrop-blur-sm border border-green-200 dark:border-green-900 rounded-xl p-2 sm:p-4 overflow-x-auto">
                     <table className="w-full min-w-[700px]">
                       <thead>
                         <tr className="border-b border-green-200 dark:border-green-900">
@@ -445,14 +433,12 @@ const Index = () => {
 
               <PrayerCard />
               
-              {/* SEO için görünmeyen şehir içerik bağlantıları */}
               <div className="hidden">
                 <h2>{cityLabel} İftar Saati</h2>
                 <p>{cityLabel} için iftar saati: {todayTimes?.aksam}, imsak saati: {todayTimes?.imsak}</p>
                 <p>{cityLabel} Ramazan İmsakiyesi 2024 - {formatDate(currentTime)} {todayTimes?.hicri_tarih}</p>
               </div>
               
-              {/* İlgili şehirler (SEO için) - 81 il hepsi */}
               <div className="mt-16">
                 <h2 className="text-xl text-[#33691e] dark:text-[#aed581] mb-4 text-center">Diğer Şehirler İçin İftar Vakitleri</h2>
                 <div className="flex flex-wrap justify-center gap-2">
@@ -470,7 +456,6 @@ const Index = () => {
                 </div>
               </div>
               
-              {/* Footer için SEO içeriği */}
               <footer className="mt-16 text-center text-sm text-gray-600 dark:text-gray-400">
                 <p>İftarsaati.net - Türkiye'nin en güncel iftar ve sahur vakitleri</p>
                 <p className="mt-1">

@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Check, MapPin, Star } from "lucide-react";
+import { Check, MapPin, Star, LocateFixed } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -96,7 +96,7 @@ const CitySelector = ({ selectedCity, onCityChange }: CitySelectorProps) => {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 mb-2">
         <Select value={selectedCity} onValueChange={onCityChange}>
           <SelectTrigger className="w-64 bg-white/90 dark:bg-[#2e463b]/90 backdrop-blur-sm border border-green-200 dark:border-green-900 rounded-full">
             <SelectValue placeholder="Şehir seçiniz" />
@@ -136,42 +136,44 @@ const CitySelector = ({ selectedCity, onCityChange }: CitySelectorProps) => {
           </SelectContent>
         </Select>
         
-        <Button
-          variant="outline"
-          size="icon"
-          className={`rounded-full 
-            ${
-              isFavorite
-                ? "bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-700"
-                : "bg-white/80 dark:bg-[#2e463b]/80 border-green-200 dark:border-green-900"
-            }`}
-          onClick={toggleFavorite}
-          aria-label={isFavorite ? "Favorilerden kaldır" : "Favorilere ekle"}
-        >
-          <Star
-            className={`h-5 w-5 ${
-              isFavorite
-                ? "text-amber-500"
-                : "text-gray-400 dark:text-gray-500"
-            }`}
-            fill={isFavorite ? "currentColor" : "none"}
-          />
-        </Button>
-        
-        <Button
-          variant="outline"
-          size="icon"
-          className="rounded-full bg-white/80 dark:bg-[#2e463b]/80 border-green-200 dark:border-green-900"
-          onClick={detectLocation}
-          disabled={isGettingLocation}
-          aria-label="Konumumu bul"
-        >
-          {isGettingLocation ? (
-            <div className="h-5 w-5 animate-spin rounded-full border-2 border-green-600 border-t-transparent" />
-          ) : (
-            <MapPin className="h-5 w-5 text-[#33691e] dark:text-[#aed581]" />
-          )}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            className={`rounded-full 
+              ${
+                isFavorite
+                  ? "bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-700"
+                  : "bg-white/80 dark:bg-[#2e463b]/80 border-green-200 dark:border-green-900"
+              }`}
+            onClick={toggleFavorite}
+            aria-label={isFavorite ? "Favorilerden kaldır" : "Favorilere ekle"}
+          >
+            <Star
+              className={`h-5 w-5 ${
+                isFavorite
+                  ? "text-amber-500"
+                  : "text-gray-400 dark:text-gray-500"
+              }`}
+              fill={isFavorite ? "currentColor" : "none"}
+            />
+          </Button>
+          
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-full bg-white/80 dark:bg-[#2e463b]/80 border-green-200 dark:border-green-900"
+            onClick={detectLocation}
+            disabled={isGettingLocation}
+            aria-label="Konumumu bul"
+          >
+            {isGettingLocation ? (
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-green-600 border-t-transparent" />
+            ) : (
+              <LocateFixed className="h-5 w-5 text-[#33691e] dark:text-[#aed581]" />
+            )}
+          </Button>
+        </div>
       </div>
     </div>
   );
